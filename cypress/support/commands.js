@@ -68,3 +68,15 @@ Cypress.Commands.add('createArticle', (title, description, body) => {
     });
   });
 });
+
+Cypress.Commands.add('deleteArticle', (slug) => {
+  cy.getCookie('auth').should('exist').then((token) => {
+    const authToken = token.value;
+
+    cy.request({
+      method: 'DELETE',
+      url: `/api/articles/${slug}`,
+      headers: { Authorization: `Token ${authToken}` }
+    });
+  });
+});
