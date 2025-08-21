@@ -48,7 +48,7 @@ Cypress.Commands.add('login', (email, username, password) => {
 });
 
 Cypress.Commands.add('createArticle', (title, description, body) => {
-  return cy.getCookie('auth').then((token) => {
+  return cy.getCookie('auth').should('exist').then((token) => {
     const authToken = token.value;
 
     return cy.request({
@@ -72,10 +72,10 @@ Cypress.Commands.add('createArticle', (title, description, body) => {
 });
 
 Cypress.Commands.add('deleteArticle', (slug) => {
-  cy.getCookie('auth').should('exist').then((token) => {
+  return cy.getCookie('auth').should('exist').then((token) => {
     const authToken = token.value;
 
-    cy.request({
+    return cy.request({
       method: 'DELETE',
       url: `/api/articles/${slug}`,
       headers: { Authorization: `Token ${authToken}` }

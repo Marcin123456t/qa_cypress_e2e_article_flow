@@ -31,9 +31,15 @@ describe('Article flow', () => {
         const slug = article.slug;
 
         cy.visit(`/article/${slug}`);
+
         cy.contains('button', 'Delete Article').click();
 
         cy.location('pathname').should('eq', '/');
+
+        cy.request({
+          url: `/api/articles/${slug}`,
+          failOnStatusCode: false
+        }).its('status').should('eq', 404);
       });
   });
 });
