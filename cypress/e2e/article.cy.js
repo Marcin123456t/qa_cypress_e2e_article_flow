@@ -26,12 +26,14 @@ describe('Article flow', () => {
   });
 
   it('should delete the article', () => {
-    cy.createArticle(articleTitle, articleDescription, articleBody);
+    cy.createArticle(articleTitle, articleDescription, articleBody)
+      .then((article) => {
+        const slug = article.slug;
 
-    cy.visit(`/article/${articleTitle.replace(/\s+/g, '-').toLowerCase()}`);
+        cy.visit(`/article/${slug}`);
+        cy.contains('button', 'Delete Article').click();
 
-    cy.contains('button', 'Delete Article').click();
-
-    cy.url().should('eq', `${Cypress.config().baseUrl}/`);
+        cy.location('pathname').should('eq', '/');
+      });
   });
 });
